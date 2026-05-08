@@ -6,6 +6,7 @@ import Footer from "./../../Components/Footer/Footer";
 import "./CourseInfo.css";
 import Breadcrumb from "../../Components/Breadcrump/Breadcrump";
 import CourseDetailBox from "../../Components/CourseDetailBox/CourseDetailBox";
+import CommentsTextArea from "../../Components/CommentsTextArea/CommentsTextArea";
 
 export default function CourseInfo() {
   return (
@@ -365,7 +366,9 @@ export default function CourseInfo() {
                   </p>
                 </div>
 
+
                 {/* Finish Teacher Details */}
+                <CommentsTextArea/>
               </div>
             </div>
 
