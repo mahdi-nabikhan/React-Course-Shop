@@ -34,11 +34,27 @@ export default function Register() {
         value: "",
         isValid: false,
       },
+      confirmPassword: { value: "", isValid: false }
     },
     false
   );
 
   const registerNewUser = (event) => {
+    const newUserInfos = {
+      name: formState.inputs.name.value,
+      username: formState.inputs.username.value,
+      email: formState.inputs.email.value,
+      password: formState.inputs.password.value,
+      confirmPassword: formState.inputs.confirmPassword.value
+    };
+    fetch('localhost:4000/v1/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newUserInfos)
+
+    }).then(res => console.log(res))
     event.preventDefault();
     console.log("User Register");
   };
@@ -125,14 +141,29 @@ export default function Register() {
                   maxValidator(18)
                 ]}
               />
+              <div className="login-form__password">
+                <Input
+                  type="password"
+                  placeholder="تکرار رمز عبور"
+                  className="login-form__password-input"
+                  element="input"
+                  id="confirmPassword"
+                  onInputHandler={onInputHandler}
+                  validations={[
+                    requiredValidator(),
+                    minValidator(8),
+                    maxValidator(18)
+                  ]}
+                />
+                <i className="login-form__password-icon fa fa-lock"></i>
+              </div>
               <i className="login-form__password-icon fa fa-lock-open"></i>
             </div>
             <Button
-              className={`login-form__btn ${
-                formState.isFormValid
+              className={`login-form__btn ${formState.isFormValid
                   ? "login-form__btn-success"
                   : "login-form__btn-error"
-              }`}
+                }`}
               type="submit"
               onClick={registerNewUser}
               disabled={false}
