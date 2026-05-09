@@ -6,14 +6,15 @@ import Input from "../../Components/Form/Input";
 import Navbar from "../../Components/Navbar/Navbar";
 import Topbar from "../../Components/Topbar/Topbar";
 
+import { requiredValidator, minValidator, maxValidator, emailValidator } from "../../validators/rules"; 
+
 import "./Login.css";
 
 export default function Login() {
-
   const userLogin = (event) => {
-    event.preventDefault()
-    console.log('User Login');
-  }
+    event.preventDefault();
+    console.log("User Login");
+  };
 
   return (
     <>
@@ -39,6 +40,12 @@ export default function Login() {
                 type="text"
                 placeholder="نام کاربری یا آدرس ایمیل"
                 element="input"
+                validations={[
+                  requiredValidator(),
+                  minValidator(8),
+                  maxValidator(20),
+                  emailValidator()
+                ]}
               />
               <i className="login-form__username-icon fa fa-user"></i>
             </div>
@@ -48,17 +55,30 @@ export default function Login() {
                 type="password"
                 className="login-form__password-input"
                 placeholder="رمز عبور"
+                validations={[
+                  requiredValidator(),
+                  minValidator(8),
+                  maxValidator(18)
+                ]}
               />
 
               <i className="login-form__password-icon fa fa-lock-open"></i>
             </div>
-            <Button className="login-form__btn" type="submit" onClick={userLogin} disabled={false}>
-            <i className="login-form__btn-icon fas fa-sign-out-alt"></i>
+            <Button
+              className="login-form__btn"
+              type="submit"
+              onClick={userLogin}
+              disabled={false}
+            >
+              <i className="login-form__btn-icon fas fa-sign-out-alt"></i>
               <span className="login-form__btn-text">ورود</span>
             </Button>
             <div className="login-form__password-setting">
               <label className="login-form__password-remember">
-                <input className="login-form__password-checkbox" type="checkbox" />
+                <input
+                  className="login-form__password-checkbox"
+                  type="checkbox"
+                />
                 <span className="login-form__password-text">
                   مرا به خاطر داشته باش
                 </span>
