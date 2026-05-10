@@ -7,6 +7,7 @@ import CourseDetailBox from "../../Components/CourseDetailBox/CourseDetailBox";
 import CommentsTextArea from "../../Components/CommentsTextArea/CommentsTextArea";
 import Accordion from "react-bootstrap/Accordion";
 import { useParams } from "react-router-dom";
+import swal from 'sweetalert'
 
 import "./CourseInfo.css";
 
@@ -21,7 +22,7 @@ export default function CourseInfo() {
 
   useEffect(() => {
     const localStorageData = JSON.parse(localStorage.getItem("user"));
-    const token = localStorageData?.token || ""; // اگر null یا undefined بود، رشته خالی
+    const token = localStorageData?.token || ""; // جلوگیری از null
 
     fetch(`http://localhost:5000/v1/courses/${courseName}`, {
       method: "POST",
@@ -40,6 +41,56 @@ export default function CourseInfo() {
       })
       .catch(err => console.error("Fetch error:", err));
   }, [courseName]);
+
+  const submitComment = (newCommentBody) => {
+    const localStorageData = JSON.parse(localStorage.getItem("user"));
+    if (!localStorageData?.token) {
+      swal({
+        title: 'برای ثبت نظر ابتدا وارد شوید',
+        icon: 'warning',
+        buttons: 'تایید'
+      });
+      return;
+    }
+
+    fetch(`http://localhost:5000/v1/comments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorageData.token}`,
+      },
+      body: JSON.stringify({
+        body: newCommentBody,
+        courseShortName: courseName,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.status === 201 || result.success) {
+          swal({
+            title: 'کامنت موردنظر با موفقیت ثبت شد',
+            icon: 'success',
+            buttons: 'تایید'
+          });
+          // می‌توانید لیست کامنت‌ها را دوباره fetch کنید یا نظر جدید را به state اضافه کنید
+        } else {
+          swal({
+            title: 'خطا در ثبت نظر',
+            text: result.message || 'مجددا تلاش کنید',
+            icon: 'error',
+            buttons: 'تایید'
+          });
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        swal({
+          title: 'خطا در ارتباط با سرور',
+          icon: 'error',
+          buttons: 'تایید'
+        });
+      });
+  };
 
   return (
     <>
@@ -289,7 +340,10 @@ export default function CourseInfo() {
 
                 {/* Finish Teacher Details */}
 
-                <CommentsTextArea comments={comments} />
+                <CommentsTextArea
+                  comments={comments}
+                  submitComment={submitComment}
+                />
               </div>
             </div>
 
