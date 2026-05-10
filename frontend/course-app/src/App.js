@@ -13,6 +13,7 @@ export default function App() {
   const router = useRoutes(routes)
   const login = (token) =>{
     setToken(token)
+    setLoggedIn(true)
     localStorage.setItem('user',{token})
 
   }

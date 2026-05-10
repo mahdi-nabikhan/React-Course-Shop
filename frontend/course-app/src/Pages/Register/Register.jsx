@@ -14,6 +14,7 @@ import {
 } from "../../validators/rules";
 
 import "./Register.css";
+import authContext from "../../context/authContext";
 
 export default function Register() {
   const [formState, onInputHandler] = useForm(
@@ -47,14 +48,14 @@ export default function Register() {
       password: formState.inputs.password.value,
       confirmPassword: formState.inputs.confirmPassword.value
     };
-    fetch('localhost:4000/v1/auth/register', {
+    fetch('http://localhost:5000/v1/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(newUserInfos)
 
-    }).then(res => console.log(res))
+    }).then(res => res.json()).then((result)=>{authContext.login(result.user,result.accessToken)}) 
     event.preventDefault();
     console.log("User Register");
   };
