@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import "./Topbar.css";
+import { Link, data } from "react-router";
 
 export default function Topbar() {
+  const[allTobbarLinks,setAllTopbarLinks]=useState([])
+  useEffect(()=>{
+    fetch('http://localhost:5000/v1/menus/topbar').then(res => res.json()).then(data => setAllTopbarLinks(data)) 
+  },[])
+  const getRandomItemsFromArray = (arr,randomCount) => {
+    const shuffled = [...arr].sort(()=> 0.5 - Math.random())
+    return shuffled.slice(0,randomCount)
+  }
   return (
     <div class="top-bar">
       <div class="container-fluid">
@@ -10,40 +19,18 @@ export default function Topbar() {
           <div class="top-bar__right">
             <ul class="top-bar__menu">
               <li class="top-bar__item">
-                <a href="#" class="top-bar__link">
-                  آموزش Html
-                </a>
-              </li>
-              <li class="top-bar__item">
-                <a href="#" class="top-bar__link">
-                  آموزش Css
-                </a>
-              </li>
-              <li class="top-bar__item">
-                <a href="#" class="top-bar__link">
-                  آموزش جاوا اسکریپت
-                </a>
-              </li>
-              <li class="top-bar__item">
-                <a href="#" class="top-bar__link">
-                  آموزش بوت استرپ
-                </a>
-              </li>
-              <li class="top-bar__item">
-                <a href="#" class="top-bar__link">
-                  آموزش پایتون
-                </a>
-              </li>
-              <li class="top-bar__item">
-                <a href="#" class="top-bar__link">
-                  آموزش ری‌اکت
-                </a>
-              </li>
-              <li class="top-bar__item">
-                <a href="#" class="top-bar__link">
-                  20,000 تومان
-                </a>
-              </li>
+                {
+
+                  getRandomItemsFromArray(allTobbarLinks,5).map(link => (
+                    <Link href={link.href} class="top-bar__link">
+                    {link.tile} 
+                  </Link>
+
+                  ))
+                }
+                </li>
+                
+             
             </ul>
           </div>
           <div class="top-bar__left">
