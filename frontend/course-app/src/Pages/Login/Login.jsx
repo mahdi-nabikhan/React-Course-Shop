@@ -1,11 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Footer from "../../Components/Footer/Footer";
 import Button from "../../Components/Form/Button";
 import Input from "../../Components/Form/Input";
 import Navbar from "../../Components/Navbar/Navbar";
 import Topbar from "../../Components/Topbar/Topbar";
 import { useForm } from "../../hooks/useForm";
+import AuthContext from "../../context/authContext";
+import swal from 'sweetalert'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 import {
   requiredValidator,
@@ -17,6 +20,10 @@ import {
 import "./Login.css";
 
 export default function Login() {
+
+  const authContext = useContext(AuthContext)
+  const navigate = useNavigate()
+
   const [formState, onInputHandler] = useForm(
     {
       username: {
@@ -31,12 +38,47 @@ export default function Login() {
     false
   );
 
-  console.log(formState);
-
   const userLogin = (event) => {
     event.preventDefault();
-    console.log("User Login");
+
+    const userData = {
+      identifier: formState.inputs.username.value,
+      password: formState.inputs.password.value,
+    };
+
+    fetch(`http://localhost:5000/v1/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((res) => {
+        console.log(res);
+        if (!res.ok) {
+          return res.text().then((text) => {
+            throw new Error(text);
+          });
+        } else {
+          return res.json();
+        }
+      })
+      .then((result) => {
+        swal({title:'کاربر با موفقیت لاگین شد',icon:'success',buttons:'ورورد به پنل'}).then(value =>{navigate('/')})
+        authContext.login({}, result.accessToken)
+      })
+      .catch((err) => {
+        
+       swal({title:'کاربر با این نام کاربری وجود ندارد ',icon:'error',buttons:'ورورد به پنل'})
+      });
+
+    console.log(userData);
   };
+
+
+  const onChangeHandler = () =>{
+
+  }
 
   return (
     <>
@@ -67,7 +109,7 @@ export default function Login() {
                   requiredValidator(),
                   minValidator(8),
                   maxValidator(20),
-                  emailValidator()
+                  // emailValidator(),
                 ]}
                 onInputHandler={onInputHandler}
               />
@@ -89,6 +131,7 @@ export default function Login() {
               />
 
               <i className="login-form__password-icon fa fa-lock-open"></i>
+              <ReCAPTCHA sitekey="h" onChange={onChangeHandler}></ReCAPTCHA>
             </div>
             <Button
               className={`login-form__btn ${
