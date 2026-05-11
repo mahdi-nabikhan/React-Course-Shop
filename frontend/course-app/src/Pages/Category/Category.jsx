@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Topbar from "./../../Components/Topbar/Topbar";
 import Navbar from "./../../Components/Navbar/Navbar";
 import Footer from "./../../Components/Footer/Footer";
@@ -6,8 +6,17 @@ import Footer from "./../../Components/Footer/Footer";
 import "./Category.css";
 import CourseBox from "../../Components/CourseBox/CourseBox";
 import Pagination from "../../Components/Pagination/Pagination";
+import { useParams } from "react-router";
 
 export default function Category() {
+  const [courses,setCourses]=useState([])
+  const {categoryName}=useParams()
+  useEffect(()=>{
+      fetch(`http://localhost:5000/v1/courses/category/${categoryName}`).then(res => res.json()).then(allCourses =>{
+        console.log(allCourses)
+        setCourses(allCourses)
+      })
+  })
   return (
     <>
       <Topbar />
@@ -67,14 +76,22 @@ export default function Category() {
           <div class="courses-content">
             <div class="container">
               <div class="row">
-                <CourseBox />
-                <CourseBox />
-                <CourseBox />
+                {
+                  courses.length === 0 ? (<div className="alert alert-warning">هیج دوره ای برای این کتگوری وجود ندارد</div>) : (<>
+                    {courses.map(course =>(
+                      <CourseBox {...course} />
+                  ))}
+                  <Pagination />
+                    
+                    </>)
+                }
+                
+                
               </div>
             </div>
           </div>
 
-          <Pagination />
+          
 
         </div>
       </section>

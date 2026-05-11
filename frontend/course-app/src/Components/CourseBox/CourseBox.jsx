@@ -1,16 +1,16 @@
 import React,{useState} from "react";
 import CircleSpinner from "../CircleSpinner/CircleSpinner";
 import "./CourseBox.css";
-
-export default function CourseBox() {
+import { Link } from "react-router";
+export default function CourseBox(props) {
   const[isImgShow,setIsImgShow]=useState(false)
   const onImageLoaded = () => setIsImgShow(true)
   return (
     <div class="col-4">
       <div class="course-box">
-        <a href="#">
+        <link href="#">
           <img
-            src="images/courses/fareelancer.png"
+            src={props.cover}
             alt="Course img"
             class="course-box__img"
             onLoad={onImageLoaded}
@@ -20,11 +20,11 @@ export default function CourseBox() {
             <CircleSpinner/>
           )
           }
-        </a>
+        </link>
         <div class="course-box__main">
-          <a href="#" class="course-box__title">
-            دوره پروژه محور متخصص جنگو
-          </a>
+          <Link to={`/course-info/${props.shortName}`} href="#" class="course-box__title">
+                {props.name}
+          </Link>
 
           <div class="course-box__rating-teacher">
             <div class="course-box__teacher">
@@ -67,7 +67,7 @@ export default function CourseBox() {
               <i class="fas fa-users course-box__users-icon"></i>
               <span class="course-box__users-text">500</span>
             </div>
-            <span class="course-box__price">1,000,000</span>
+            <span class="course-box__price">{props.price === 0 ? 'رایگان':props.price.toLocalString()}</span>
           </div>
         </div>
 
