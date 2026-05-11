@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ArticleBox from "../ArticleBox/ArticleBox";
 import SectionHeader from "./../SectionHeader/SectionHeader";
 
 import "./LastArticles.css";
 
 export default function LastArticles() {
+  const [articles, setArticles] = useState()
+  useEffect(() => {
+    fetch(`http://localhost:5000/v1/articles`).then(res => res.json()).then(allArticle => {
+      console.log(allArticle)
+    })
+  })
   return (
     <section class="articles">
       <div class="container">
@@ -16,21 +22,16 @@ export default function LastArticles() {
 
         <div class="articles__content">
           <div class="row">
-            <ArticleBox
-              title="نحوه نصب کتابخانه در پایتون | آموزش نصب کتابخانه پایتون"
-              cover="images/blog/3.jpg"
-              desc="زبان پایتون هم مانند دیگر زبان­های برنامه نویسی رایج، دارای کتابخانه های مختلفی برای تسریع..."
-            />
-            <ArticleBox
-              title="نحوه نصب کتابخانه در پایتون | آموزش نصب کتابخانه پایتون"
-              cover="images/blog/3.jpg"
-              desc="زبان پایتون هم مانند دیگر زبان­های برنامه نویسی رایج، دارای کتابخانه های مختلفی برای تسریع..."
-            />
-            <ArticleBox
-              title="نحوه نصب کتابخانه در پایتون | آموزش نصب کتابخانه پایتون"
-              cover="images/blog/3.jpg"
-              desc="زبان پایتون هم مانند دیگر زبان­های برنامه نویسی رایج، دارای کتابخانه های مختلفی برای تسریع..."
-            />
+            {articles.map((article) => {
+              <ArticleBox {...article}
+              />
+
+            })}
+
+
+            cover="images/blog/3.jpg"
+            desc="زبان پایتون هم مانند دیگر زبان­های برنامه نویسی رایج، دارای کتابخانه های مختلفی برای تسریع..."
+
           </div>
         </div>
       </div>

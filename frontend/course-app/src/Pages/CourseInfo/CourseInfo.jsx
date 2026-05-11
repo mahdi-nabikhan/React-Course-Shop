@@ -17,6 +17,7 @@ export default function CourseInfo() {
   const [createdAt, setCreatedAt] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
   const [courseDetails, setCourseDetails] = useState({});
+  const [courseTeacher,setCourseTeacher] = useState({})
 
   const { courseName } = useParams();
 
@@ -37,6 +38,7 @@ export default function CourseInfo() {
         setCourseDetails(courseInfo);
         setCreatedAt(courseInfo.createdAt || "");
         setUpdatedAt(courseInfo.updatedAt || "");
+        setCourseTeacher(courseInfo.creator)
         console.log(courseInfo);
       })
       .catch(err => console.error("Fetch error:", err));
@@ -319,10 +321,10 @@ export default function CourseInfo() {
                       />
                       <div className="techer-details__header-titles">
                         <a href="#" className="techer-details__header-link">
-                          محمدامین سعیدی راد
+                            {courseTeacher.name}
                         </a>
                         <span className="techer-details__header-skill">
-                          Front End & Back End Developer
+                          {courseTeacher.task}
                         </span>
                       </div>
                     </div>
