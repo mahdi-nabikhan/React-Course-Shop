@@ -1,51 +1,36 @@
 import React, { useEffect, useState } from "react";
-
+import { Link } from "react-router";
 import "./Pagination.css";
 import { useParams } from "react-router";
 
-export default function Pagination({items,itemCount,pathName,setShownCourses}) {
-  const {page}=useParams()
-  const [pageCount,setPageCount]=useState(null)
-  useEffect(()=>{
+export default function Pagination({ items, itemCount, pathName, setShownCourses }) {
+  const { page } = useParams()
+  const [pagesCount, setPagesCount] = useState(null)
+  useEffect(() => {
     let endIndex = itemCount * page
     let startIndex = endIndex - itemCount
-    let paginatedItem = items.slice(startIndex,endIndex)
+    let paginatedItem = items.slice(startIndex, endIndex)
     setShownCourses(paginatedItem)
     let pageNumber = Math.ceil(items.lenght / itemCount)
-    setPageCount(pageNumber)
+    setPagesCount(pageNumber)
 
-  },[page])
+  }, [page])
   return (
     <div class="courses-pagination">
       <ul class="courses__pagination-list">
-        <li class="courses__pagination-item">
-          <a href="#" class="courses__pagination-link">
-            <i class="fas fa-long-arrow-alt-right courses__pagination-icon"></i>
-          </a>
-        </li>
-        <li class="courses__pagination-item">
-          <a href="#" class="courses__pagination-link">
-            1
-          </a>
-        </li>
-        <li class="courses__pagination-item">
-          <a href="#" class="courses__pagination-link">
-            2
-          </a>
-        </li>
-        <li class="courses__pagination-item">
-          <a
-            href="#"
-            class="courses__pagination-link courses__pagination-link--active"
-          >
-            3
-          </a>
-        </li>
-        <li class="courses__pagination-item">
-          <a href="#" class="courses__pagination-link">
-            <i class="fas fa-long-arrow-alt-left courses__pagination-icon"></i>
-          </a>
-        </li>
+
+        {Array(pagesCount).fill(0).map((item, index) => (
+          <li class="courses__pagination-item">
+            {
+              index + 1 === Number(page) ? (<Link to={`${pathName}/${index+1}`} class="courses__pagination-link active">{index + 1}
+                <i class="fas fa-long-arrow-alt-right courses__pagination-icon"></i>
+              </Link>) : (<Link to={`${pathName}/${index+1}`} class="courses__pagination-link">{index + 1}
+                <i class="fas fa-long-arrow-alt-right courses__pagination-icon"></i>
+              </Link>)
+            }
+
+          </li>
+        ))}
       </ul>
     </div>
   );

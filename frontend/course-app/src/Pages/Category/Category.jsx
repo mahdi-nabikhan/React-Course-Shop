@@ -11,6 +11,7 @@ import { useParams } from "react-router";
 export default function Category() {
   const [courses,setCourses]=useState([])
   const {categoryName}=useParams()
+  const [shownCourses,setShownCourses] = useState([])
   useEffect(()=>{
       fetch(`http://localhost:5000/v1/courses/category/${categoryName}`).then(res => res.json()).then(allCourses =>{
         console.log(allCourses)
@@ -78,10 +79,10 @@ export default function Category() {
               <div class="row">
                 {
                   courses.length === 0 ? (<div className="alert alert-warning">هیج دوره ای برای این کتگوری وجود ندارد</div>) : (<>
-                    {courses.map(course =>(
+                    {shownCourses.map(course =>(
                       <CourseBox {...course} />
                   ))}
-                  <Pagination />
+                  <Pagination items={courses} itemCount={1} pathName={`category-info/${categoryName}`} setShownCourses={setShownCourses} />
                     
                     </>)
                 }
