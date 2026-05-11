@@ -15,7 +15,7 @@ export default function Category() {
       fetch(`http://localhost:5000/v1/courses/category/${categoryName}`).then(res => res.json()).then(allCourses =>{
         console.log(allCourses)
         setCourses(allCourses)
-      })
+      },[categoryName])
   })
   return (
     <>
