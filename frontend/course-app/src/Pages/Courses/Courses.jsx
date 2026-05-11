@@ -5,11 +5,12 @@ import Breadcrumb from "./../../Components/Breadcrump/Breadcrump";
 import Footer from "./../../Components/Footer/Footer";
 import CourseBox from "./../../Components/CourseBox/CourseBox";
 import "./Courses.css";
-
+import Pagination from "../../Components/Pagination/Pagination";
 export default function Courses() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [shownCourses,setShownCourses] = useState([])
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -97,7 +98,7 @@ export default function Courses() {
             <div className="container">
               <div className="row">
                 {courses.length > 0 ? (
-                  courses.map((course) => (
+                  shownCourses.map((course) => (
                     <CourseBox key={course.id} {...course} />
                   ))
                 ) : (
@@ -137,7 +138,7 @@ export default function Courses() {
           </div>
         </div>
       </section>
-
+          <Pagination items={courses} itemCount={1} pathName={'/courses'} setShownCourses={setShownCourses}/>
       <Footer />
     </>
   );
