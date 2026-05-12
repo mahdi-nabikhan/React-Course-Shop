@@ -6,6 +6,7 @@ import Courses from "./Pages/Courses/Courses"
 import Login from "./Pages/Login/Login"
 import Register from "./Pages/Register/Register"
 import Article from "./Pages/Article/Article"
+import Contact from "./Pages/Contact/Contact"
 
 const routes = [
     {path:'/' ,element:<Index/>},
@@ -15,7 +16,8 @@ const routes = [
     { path: '/courses', element: <Courses /> },
     { path: '/login', element: <Login /> },
     { path: '/register', element: <Register /> },
-    {path :'/article/:page', element :<Article/>}
+    {path :'/article/:page', element :<Article/>},
+    {path:'/contact',element:<Contact/>}
 
 
 ]
