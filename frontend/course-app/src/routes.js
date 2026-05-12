@@ -10,7 +10,7 @@ import Contact from "./Pages/Contact/Contact"
 import Search from "./Pages/Search/Search"
 import AdminPanel from "./Pages/Panel"
 import Users from "./Pages/Panel/Users/Users"
-import Courses from "./Pages/Panel/AdminCourse/AdminCourse"
+
 import AdminCourse from "./Pages/Panel/AdminCourse/AdminCourse"
 import Menu from "./Pages/Panel/Menu/Menu"
 import AdminArticles from "./Pages/Panel/AdminArticles/AdminArticles"

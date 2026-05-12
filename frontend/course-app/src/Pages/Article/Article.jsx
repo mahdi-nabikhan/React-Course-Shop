@@ -6,7 +6,7 @@ import Breadcrumb from "../../Components/Breadcrump/Breadcrump";
 import ArticleBox from "./../../Components/ArticleBox/ArticleBox";
 import Pagination from "./../../Components/Pagination/Pagination";
 
-import "./Articles.css";
+import "./Article.css";
 
 export default function Articles() {
   const [articles, setArticles] = useState([]);

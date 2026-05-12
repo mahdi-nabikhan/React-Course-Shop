@@ -1,7 +1,20 @@
-import React from 'react'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import Sidebar from "../../Components/AdminPanel/Sidebar/Sidebar";
+import Topbar from "../../Components/AdminPanel/Topbar/Topbar";
+import "./index.css";
 
-export default function AdminPanel() {
+export default function index() {
   return (
-    <div>AdminPanel</div>
-  )
+    <>
+      <div id="content">
+        <Sidebar />
+
+        <div id="home" class="col-10">
+          <Topbar />
+        </div>
+      </div>
+      <Outlet />
+    </>
+  );
 }

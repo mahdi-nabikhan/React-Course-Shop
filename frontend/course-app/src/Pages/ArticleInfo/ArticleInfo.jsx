@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Topbar from "./../../Components/Topbar/Topbar";
 import Navbar from "./../../Components/Navbar/Navbar";
 import Footer from "./../../Components/Footer/Footer";
-import Breadcrumb from "./../../Components/Breadcrumb/Breadcrumb";
+import Breadcrumb from "../../Components/Breadcrump/Breadcrump";
 
 import "./ArticleInfo.css";
 import CommentsTextArea from "../../Components/CommentsTextArea/CommentsTextArea";
