@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,memo } from "react";
 
 import "./Topbar.css";
 import { Link, data } from "react-router";
 
-export default function Topbar() {
+export default memo(function Topbar() {
   const[allTobbarLinks,setAllTopbarLinks]=useState([])
   useEffect(()=>{
     fetch('http://localhost:5000/v1/menus/topbar').then(res => res.json()).then(data => setAllTopbarLinks(data)) 
@@ -51,4 +51,4 @@ export default function Topbar() {
       </div>
     </div>
   );
-}
+})
