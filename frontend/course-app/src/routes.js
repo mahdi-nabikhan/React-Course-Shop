@@ -8,7 +8,12 @@ import Register from "./Pages/Register/Register"
 import Article from "./Pages/Article/Article"
 import Contact from "./Pages/Contact/Contact"
 import Search from "./Pages/Search/Search"
-
+import AdminPanel from "./Pages/Panel"
+import Users from "./Pages/Panel/Users/Users"
+import Courses from "./Pages/Panel/AdminCourse/AdminCourse"
+import AdminCourse from "./Pages/Panel/AdminCourse/AdminCourse"
+import Menu from "./Pages/Panel/Menu/Menu"
+import AdminArticles from "./Pages/Panel/AdminArticles/AdminArticles"
 const routes = [
     {path:'/' ,element:<Index/>},
     {path:'/course-info/:courseName',element:<CourseInfo/>},
@@ -19,7 +24,12 @@ const routes = [
     { path: '/register', element: <Register /> },
     {path :'/article/:page', element :<Article/>},
     {path:'/contact',element:<Contact/>},
-    {path:'/search/:value',element :<Search/>}
+    {path:'/search/:value',element :<Search/>},
+    {path:'/p-admin/*',element :<AdminPanel/> ,children:[{path:'users',element:<Users/>},
+                                                        {path:'courses',element:<AdminCourse/>},
+                                                        {path:'menu',element:<Menu/>},
+                                                        {path:'articles',element:<AdminArticles/>}
+                                                        ]}
 
 
 ]
