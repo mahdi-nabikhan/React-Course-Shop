@@ -12,9 +12,10 @@ export default function index() {
 
         <div id="home" class="col-10">
           <Topbar />
+          <Outlet />
         </div>
       </div>
-      <Outlet />
+      
     </>
   );
 }
