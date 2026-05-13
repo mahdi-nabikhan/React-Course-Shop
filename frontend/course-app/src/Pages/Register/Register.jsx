@@ -28,6 +28,10 @@ export default function Register() {
         value: "",
         isValid: false,
       },
+      phone: {
+        value: "",
+        isValid: false,
+      },
       email: {
         value: "",
         isValid: false,
@@ -88,6 +92,22 @@ export default function Register() {
                 className="login-form__username-input"
                 element="input"
                 id="name"
+                onInputHandler={onInputHandler}
+                validations={[
+                  requiredValidator(),
+                  minValidator(6),
+                  maxValidator(20)
+                ]}
+              />
+              <i className="login-form__username-icon fa fa-user"></i>
+            </div>
+            <div className="login-form__username">
+              <Input
+                type="text"
+                placeholder="نام و نام خانوادگی"
+                className="login-form__username-input"
+                element="input"
+                id="phone"
                 onInputHandler={onInputHandler}
                 validations={[
                   requiredValidator(),
