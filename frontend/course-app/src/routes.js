@@ -28,8 +28,10 @@ const routes = [
     {path:'/p-admin/*',element :<AdminPanel/> ,children:[{path:'users',element:<Users/>},
                                                         {path:'courses',element:<AdminCourse/>},
                                                         {path:'menu',element:<Menu/>},
-                                                        {path:'articles',element:<AdminArticles/>}
-                                                        ]}
+                                                        {path:'articles',element:<AdminArticles/>},
+                                                        { path: "category", element: <AdminCategory /> }
+                                                        ],
+                                                    }
 
 
 ]
