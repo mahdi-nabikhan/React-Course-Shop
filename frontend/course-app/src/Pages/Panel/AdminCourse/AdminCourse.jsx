@@ -117,8 +117,15 @@ export default function Courses() {
     formData.append('support',formState.input.support.value)
     formData.append('status',courseStatus)
     formData.append('cover',courseCover)
+    if (courseCategory === '-1')
+    {
+      swal({
+        title:'دسته بندی رو انختاب کنید',
+        icon:'error'
 
+      })
 
+    }else{
     fetch(`http://5000/v1/courses`,{
       method:'POST',
       headers :{
@@ -134,7 +141,7 @@ export default function Courses() {
           getAllCourses()
         })
       }
-    })
+    })}
   }
 
   return (
@@ -221,6 +228,7 @@ export default function Courses() {
             <div class="col-6">
               <div class="number input">
                 <label class="input-title">دسته‌بندی دوره</label>
+                <option value="-1">لطفا دسته بندی رو انتخاب نمایید</option>
                 <select onChange={selectCategory}>
                   {categories.map((category) => (
                     <option value={category._id}>{category.title}</option>
