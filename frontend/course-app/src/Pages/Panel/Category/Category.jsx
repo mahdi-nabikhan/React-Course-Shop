@@ -12,6 +12,8 @@ import swal from "sweetalert";
 import "./Category.css";
 
 export default function Category() {
+  const localStorageData = json.parse(localStorage.getItem('user'))
+  
   const [formState, onInputHandler] = useForm(
     {
       title: {
@@ -70,7 +72,31 @@ export default function Category() {
         });
       });
   };
-
+  const removeCategory = (categoryID)=>{
+    swal({
+      title:'مطئنی ؟',
+      icon : 'warning',
+      buttons:['نه','اره']
+    }).then(result => {
+      console.log(result)
+      if (result){
+        fetch(`http://localhost:5000/v1/category/${categoryID}`,{
+          method :'DELETE',
+          headers :{
+            'Authorazation':`Bearer${localStorageData.token}`
+          }
+        }).then(res =>res.json()).then(result =>{
+          swal({
+            title:'حذف موفقیت امیز بود',
+            icon :'success',
+            buttons:'ok'
+          }).then(()=>{
+            getAllCategories()
+          })
+        })
+      }
+    })
+  }
   return (
     <>
       <div class="container-fluid" id="home-content">
@@ -142,8 +168,9 @@ export default function Category() {
                   </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-danger delete-btn">
+                  <button type="button" class="btn btn-danger delete-btn" onClick={removeCategory(category._id)}>
                     حذف
+                    
                   </button>
                 </td>
               </tr>
