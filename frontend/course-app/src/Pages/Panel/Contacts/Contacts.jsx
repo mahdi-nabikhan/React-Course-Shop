@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "../../../Components/AdminPanel/DataTable/DataTable";
-
+import {swal} from 'sweetalert'
 export default function Contact() {
 
     const [contacts, setContacts] = useState([])
@@ -13,6 +13,34 @@ export default function Contact() {
                 setContacts(allContacts)
             })
         }, [])
+
+  const sendAnwserToUser = (contactEmail) =>{
+    swal({
+      title:'متن را وارد کنید',
+      contact:'input',
+      buttons:'ارسال'
+    }).then(
+      res =>{
+        const answerInfo = {
+          email:contactEmail,
+          answer:res.value
+        }
+        const localStorageData= localStorage.getItem('user')
+        fetch(`http://localhost:5000/v1/contact/answer/`,{
+          method:'POST',
+          headers :{
+            "Content-Type": "application/json",
+            'Authorization':`Bearer${localStorageData.token}`
+          },body:JSON.stringify(answerInfo)
+        }).then(res =>{
+          if (res.ok){
+            return res.json()
+          }
+        }).then((result)=>{console.log(result)})
+      }
+    )
+
+  }
 
   return (
     <>
@@ -39,6 +67,10 @@ export default function Contact() {
                 <td>
                   <button type="button" class="btn btn-primary edit-btn">
                     مشاهده پیغام
+                  </button>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-primary edit-btn" onClick={()=>{sendAnwserToUser(contact.email)}}> پاسخ 
                   </button>
                 </td>
                 <td>
