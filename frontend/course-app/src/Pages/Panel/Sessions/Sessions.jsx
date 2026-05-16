@@ -3,11 +3,13 @@ import { useForm } from "./../../../hooks/useForm";
 import Input from "./../../../Components/Form/Input";
 import { minValidator } from "../../../validators/rules";
 import swal from "sweetalert";
+import DataTable from "../../../Components/AdminPanel/DataTable/DataTable";
 
 export default function Sessions() {
   const [courses, setCourses] = useState([]);
   const [sessionCourse, setSessionCourse] = useState('-1');
   const [sessionVideo, setSessionVideo] = useState({})
+  const [sessions, setSession] = useState([]);
   const [formState, onInputHandler] = useForm(
     {
       title: {
@@ -23,6 +25,7 @@ export default function Sessions() {
   );
 
   useEffect(() => {
+    getAllSessions()
     fetch("http://localhost:5000/v1/courses")
       .then((res) => res.json())
       .then((allCourses) => {
@@ -59,6 +62,13 @@ export default function Sessions() {
     })
 
 
+  }
+  function getAllSessions (){
+    fetch (`http://localhost:5000/v1/courses/sessions`,{
+
+    }).then(res =>res.json()).then(allSessions =>{
+        setSession(allSessions)
+    })
   }
   return (
     <>
@@ -127,6 +137,34 @@ export default function Sessions() {
           </form>
         </div>
       </div>
+      <DataTable title='جلسات'>
+      <table class="table">
+          <thead>
+            <tr>
+              <th>شناسه</th>
+              <th>عنوان</th>
+              <th>تایم</th>
+              <th>دوره</th>
+              <th>حذف</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sessions.map((session, index) => (
+              <tr key={session._id}>
+                <td>{index + 1}</td>
+                <td>{session.title}</td>
+                <td>{session.time}</td>
+                <td>{session.course.name}</td>
+                <td>
+                  <button type="button" class="btn btn-danger delete-btn">
+                    حذف
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </DataTable>
     </>
   );
 }
