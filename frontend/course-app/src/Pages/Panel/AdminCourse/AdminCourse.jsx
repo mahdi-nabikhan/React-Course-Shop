@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import DataTable from '../../../Components/AdminPanel/DataTable'
-
+import {swal} from 'sweetalert'
 export default function AdminCourse() {
   const [courses,setCourses]=useState([])
   useEffect(()=>{
@@ -17,6 +17,40 @@ export default function AdminCourse() {
       });
 
   },[])
+
+  }
+  function getAllCourses (){
+   fetch("http://localhost:5000/v1/courses",{
+    method:'GET',
+    headers :{ Authorization: `Bearer ${localStorageData.token}`}
+   }).then(res =>res.json()).then((allCourses)=>{
+    setCourses(allCourses)
+   })
+    
+  }
+  const removeCourse = (courseID)=>{
+    swal({
+      title:'مطمئنی',
+      icon:'warning',
+      buttons :['نه','اره']
+    }).then((result) =>{
+      if (result){
+        fetch(`http://localhost:5000/v1/courses/${courseID}`,{
+          method :'DELETE',
+          headers :{
+            "Authorization": `Bearer ${localStorageData.token}`
+          }
+        }).then(res =>res.json()).then((result)=>{
+          swal({
+            title:'حذف شد',
+            icon:'success',
+            buttons:'ok'
+          })
+        })
+      }
+    })
+
+  }
   return (
     <>
     <DataTable title='دوره ها ' >
@@ -50,7 +84,7 @@ export default function AdminCourse() {
                   </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-danger delete-btn">
+                  <button type="button" class="btn btn-danger delete-btn" onClick={()=>removeCourse(course._id)}>
                     حذف
                   </button>
                 </td>
@@ -65,4 +99,4 @@ export default function AdminCourse() {
     </>
 
   )
-}
+
