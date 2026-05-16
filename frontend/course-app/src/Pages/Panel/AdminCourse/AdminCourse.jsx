@@ -108,7 +108,33 @@ export default function Courses() {
 
   const addNewCourse = event => {
     event.preventDefault()
-    console.log(formState);
+    let formData = new FormData()
+    formData.append('name',formState.input.name.value)
+    formData.append('description',formState.input.description.value)
+    formData.append('shortName',formState.input.shortName.value)
+    formData.append('categoryID',courseCategory)
+    formData.append('price',formState.input.price.value)
+    formData.append('support',formState.input.support.value)
+    formData.append('status',courseStatus)
+    formData.append('cover',courseCover)
+
+
+    fetch(`http://5000/v1/courses`,{
+      method:'POST',
+      headers :{
+        Authorization:`Bearer${localStorageData.token}`
+      },body:formData
+    }).then(res =>{
+      if (res.ok){
+        swal({
+          title:'اضافه کردن یک دوره جدید',
+          icon:'success',
+          buttons:'اضافه شد'
+        }).then(()=>{
+          getAllCourses()
+        })
+      }
+    })
   }
 
   return (
