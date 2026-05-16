@@ -13,6 +13,37 @@ import "./Category.css";
 
 export default function Category() {
   const localStorageData = json.parse(localStorage.getItem('user'))
+  const updateHandler = (categoryID) =>{
+    swal({
+      title:"عنوان جدید",
+      content:'input',
+      buttons:'ثبت عنوان جدید'
+    }).then(result =>{
+      if(result.trim().length){
+        fetch(`http://localhost:5000/v1/category/${categoryID}`,{
+          method:'PUT',
+          headers :{
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorageData.token}`,
+            
+          },
+          body:json.stringify({
+            title:result
+          })
+        }).then(res => res.json()).then(result => {
+          swal({
+            title:'بروز رسانی شد',
+            icon:'success',
+          buttons:'ok'
+                  }).then(()=>{
+                    getAllCategories()
+                  })
+        })
+
+      }
+    })
+
+  }
   
   const [formState, onInputHandler] = useForm(
     {
@@ -163,7 +194,7 @@ export default function Category() {
                 <td>{index + 1}</td>
                 <td>{category.title}</td>
                 <td>
-                  <button type="button" class="btn btn-primary edit-btn">
+                  <button type="button" class="btn btn-primary edit-btn" onClick={updateHandler(category._id)}>
                     ویرایش
                   </button>
                 </td>
