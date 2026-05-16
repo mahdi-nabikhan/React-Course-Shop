@@ -4,15 +4,47 @@ import {swal} from 'sweetalert'
 export default function Contact() {
 
     const [contacts, setContacts] = useState([])
+    function getAllContacts(){
+      fetch('http://localhost:5000/v1/contact')
+      .then(res => res.json())
+      .then(allContacts => {
+          console.log(allContacts);
+          setContacts(allContacts)
+      })
+    }
 
     useEffect(() => {
-        fetch('http://localhost:5000/v1/contact')
-            .then(res => res.json())
-            .then(allContacts => {
-                console.log(allContacts);
-                setContacts(allContacts)
-            })
+       getAllContacts()
         }, [])
+
+  const removeContact= (contactID)=>{
+    const localStorageData = localStorage.getItem('user')
+    swal({
+      title:'مطمئنی ؟',
+      icon:'warning',
+      buttons:['اره','نه']
+    }).then((result)=>{
+      if(result){
+        fetch(`http://localhost:5000/v1/contact/${contactID}`,{
+          method:'DELETE',
+          headers:{
+            'Authorazition':`Bearer${localStorageData.token}`
+          }
+        }).then( res =>{
+          if (res.ok){
+            swal({
+              title:'پیغام مورد نظر حذف شد',
+              icon:'success',
+              buttons:'ok'
+            }).then(
+              getAllContacts()
+            )
+          }
+        })
+      }
+    })
+
+  }
 
   const sendAnwserToUser = (contactEmail) =>{
     swal({
@@ -81,7 +113,7 @@ export default function Contact() {
                 <td>
                   <button
                     type="button"
-                    class="btn btn-danger delete-btn"
+                    class="btn btn-danger delete-btn" onClick={removeContact(contact.id)}
                   >
                     حذف
                   </button>
