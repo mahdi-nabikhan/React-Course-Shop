@@ -70,6 +70,34 @@ export default function Sessions() {
         setSession(allSessions)
     })
   }
+  const removeSession = (sessionID) =>{
+    const localStorageData=localStorage.getItem('users')
+    swal({
+        title:'مطمنی ؟',
+        icon:'warning',
+        buttons : ['نه','اره']
+    }).then(
+        fetch(`http://localhost:5000/v1/courses/sessions/${sessionID}`,{
+        method:'DELETE',
+        headers :{
+            Autorazation :`Bearer${localStorageData.token}`
+
+        }
+    }).then(res =>{
+        if (res.ok){
+            swal({
+                title:'با موفقیت حذف شد',
+                icon:"success",
+
+            }).then(()=>{
+                getAllSessions()
+            })
+        }
+    })
+    )
+    
+
+  }
   return (
     <>
       <div class="container-fluid" id="home-content">
@@ -156,7 +184,7 @@ export default function Sessions() {
                 <td>{session.time}</td>
                 <td>{session.course.name}</td>
                 <td>
-                  <button type="button" class="btn btn-danger delete-btn">
+                  <button type="button" class="btn btn-danger delete-btn"  onClick={()=>{removeSession(session._id)}}>
                     حذف
                   </button>
                 </td>
