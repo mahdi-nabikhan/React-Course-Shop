@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Topbar from "./../../Components/Topbar/Topbar";
 import Navbar from "./../../Components/Navbar/Navbar";
 import Footer from "./../../Components/Footer/Footer";
-import Breadcrumb from './../../Components/Breadcrump/Breadcrump'
+import Breadcrumb from "../../Components/Breadcrumb/Breadcrumb";
 import CourseDetailBox from "../../Components/CourseDetailBox/CourseDetailBox";
 import CommentsTextArea from "../../Components/CommentsTextArea/CommentsTextArea";
 import Accordion from "react-bootstrap/Accordion";
@@ -17,43 +17,36 @@ export default function CourseInfo() {
   const [createdAt, setCreatedAt] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
   const [courseDetails, setCourseDetails] = useState({});
-  const [courseTeacher,setCourseTeacher] = useState({})
+  const [courseTeacher, setCourseTeacher] = useState({})
+  const [courseCategory, setCourseCategory] = useState({})
 
   const { courseName } = useParams();
 
   useEffect(() => {
     const localStorageData = JSON.parse(localStorage.getItem("user"));
-    const token = localStorageData?.token || ""; // جلوگیری از null
 
     fetch(`http://localhost:5000/v1/courses/${courseName}`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${
+          localStorageData === null ? null : localStorageData.token
+        }`,
       },
     })
       .then((res) => res.json())
       .then((courseInfo) => {
-        setComments(courseInfo.comments || []);
-        setSessions(courseInfo.sessions || []);
+        setComments(courseInfo.comments);
+        setSessions(courseInfo.sessions);
         setCourseDetails(courseInfo);
-        setCreatedAt(courseInfo.createdAt || "");
-        setUpdatedAt(courseInfo.updatedAt || "");
+        setCreatedAt(courseInfo.createdAt);
+        setUpdatedAt(courseInfo.updatedAt);
         setCourseTeacher(courseInfo.creator)
-        console.log(courseInfo);
-      })
-      .catch(err => console.error("Fetch error:", err));
-  }, [courseName]);
+        setCourseCategory(courseInfo.categoryID)
+      });
+  }, []);
 
   const submitComment = (newCommentBody) => {
     const localStorageData = JSON.parse(localStorage.getItem("user"));
-    if (!localStorageData?.token) {
-      swal({
-        title: 'برای ثبت نظر ابتدا وارد شوید',
-        icon: 'warning',
-        buttons: 'تایید'
-      });
-      return;
-    }
 
     fetch(`http://localhost:5000/v1/comments`, {
       method: "POST",
@@ -68,29 +61,11 @@ export default function CourseInfo() {
     })
       .then((res) => res.json())
       .then((result) => {
-        if (result.status === 201 || result.success) {
-          swal({
-            title: 'کامنت موردنظر با موفقیت ثبت شد',
-            icon: 'success',
-            buttons: 'تایید'
-          });
-          // می‌توانید لیست کامنت‌ها را دوباره fetch کنید یا نظر جدید را به state اضافه کنید
-        } else {
-          swal({
-            title: 'خطا در ثبت نظر',
-            text: result.message || 'مجددا تلاش کنید',
-            icon: 'error',
-            buttons: 'تایید'
-          });
-        }
-      })
-      .catch(err => {
-        console.error(err);
         swal({
-          title: 'خطا در ارتباط با سرور',
-          icon: 'error',
+          title: 'کامنت موردنظر با موفقیت ثبت شد',
+          icon: 'success',
           buttons: 'تایید'
-        });
+        })
       });
   };
 
@@ -120,7 +95,9 @@ export default function CourseInfo() {
           <div className="row">
             <div className="col-6">
               <a href="#" className="course-info__link">
-                آموزش برنامه نویسی فرانت اند
+                {
+                  courseCategory.title
+                }
               </a>
               <h1 className="course-info__title">{courseDetails.name}</h1>
               <p className="course-info__text">{courseDetails.description}</p>
@@ -168,12 +145,12 @@ export default function CourseInfo() {
                     <CourseDetailBox
                       icon="clock"
                       title="زمان برگزاری"
-                      text={createdAt ? createdAt.slice(0, 10) : "نامشخص"}
+                      text={createdAt.slice(0, 10)}
                     />
                     <CourseDetailBox
                       icon="calendar-alt"
                       title="آخرین بروزرسانی:"
-                      text={updatedAt ? updatedAt.slice(0, 10) : "نامشخص"}
+                      text={updatedAt.slice(0, 10)}
                     />
                   </div>
                 </div>
@@ -283,7 +260,7 @@ export default function CourseInfo() {
                       <Accordion.Item eventKey="0" className="accordion">
                         <Accordion.Header>جلسات دوره</Accordion.Header>
                         {sessions.map((session, index) => (
-                          <Accordion.Body key={index} className="introduction__accordion-body">
+                          <Accordion.Body key={session._id} className="introduction__accordion-body">
                             <div className="introduction__accordion-right">
                               <span className="introduction__accordion-count">
                                 {index + 1}
@@ -321,10 +298,13 @@ export default function CourseInfo() {
                       />
                       <div className="techer-details__header-titles">
                         <a href="#" className="techer-details__header-link">
-                            {courseTeacher.name}
+                          {/* محمدامین سعیدی راد */}
+                          {
+                            courseTeacher.name
+                          }
                         </a>
                         <span className="techer-details__header-skill">
-                          {courseTeacher.task}
+                          Front End & Back End Developer
                         </span>
                       </div>
                     </div>
