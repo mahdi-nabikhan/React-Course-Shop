@@ -3,7 +3,32 @@ import DataTable from './../../../Components/AdminPanel/DataTable/DataTable'
 import swal from 'sweetalert'
 export default function Comments() {
   const [comments, setComments] = useState([])
+  const acceptComment = (commentID) =>{
+    swal({
+      title: '   مطمئن هستید',
+      icon: 'warning',
+      buttons: ['اره', 'نه']
+    }).then(result => {
+      if (result) {
+        fetch(`http://localhost:5000/comments/answer/${commentID}`, {
+          method: 'PUT',
+          headers: {
+            'Authoraztion': `Bearer ${localStorageData.token}`
+          }
+        }).then(res => {
+          if (res.ok) {
+            swal({
+              title: ' موفقیت امیز بود ',
+              icon: 'success',
+              buttons: 'ok'
 
+            }).then(getAllUsers)
+          }
+        })
+
+      }
+    })
+  }
   const getAllComment =()=>{
     fetch(`http://localhost:5000/v1/comments`).then(res.josn()).then(result => { setComments(result) })
   }
@@ -96,12 +121,39 @@ export default function Comments() {
           swal({
             title:'ثبت شد',
             icon:'success',
-          buttons:'ok'          })
+          buttons:'ok'})
         }
       })
     }
 
     })
+  }
+  const rejectComment= (commentID) =>{
+    swal({
+      title: '   مطمئن هستید',
+      icon: 'warning',
+      buttons: ['اره', 'نه']
+    }).then(result => {
+      if (result) {
+        fetch(`http://localhost:5000/comments/reject/${commentID}`, {
+          method: 'PUT',
+          headers: {
+            'Authoraztion': `Bearer ${localStorageData.token}`
+          }
+        }).then(res => {
+          if (res.ok) {
+            swal({
+              title: ' موفقیت امیز بود ',
+              icon: 'success',
+              buttons: 'ok'
+
+            }).then(getAllUsers)
+          }
+        })
+
+      }
+    })
+
   }
   return (
     <>
@@ -140,6 +192,29 @@ export default function Comments() {
                       ثبت پاسخ
                     </button>
                   </td>
+                  {
+                    comment.answer ===1  ? (
+                      <>
+                      <td>
+                    <button type="button" class="btn btn-primary edit-btn" onCanPlay={()=> rejectComment(comment._id)}>
+                       رد
+                    </button>
+                  </td>
+                      </>
+                    ):(<>
+                    <td>
+                    <button type="button" class="btn btn-primary edit-btn" onCanPlay={()=> acceptComment(comment._id)}>
+                       تایید
+                    </button>
+                  </td>
+                    </>)
+                  }
+                  <td>
+                    <button type="button" class="btn btn-primary edit-btn" onCanPlay={()=> acceptComment(comment._id)}>
+                       تایید
+                    </button>
+                  </td>
+                  
                   <td>ehsan1323</td>
                   <td>
                     <button type="button" class="btn btn-primary edit-btn">
