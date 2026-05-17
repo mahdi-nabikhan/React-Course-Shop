@@ -16,6 +16,7 @@ import Menu from "./Pages/Panel/Menu/Menu"
 import AdminArticles from "./Pages/Panel/AdminArticles/AdminArticles"
 import Contacts from "./Pages/Panel/Contacts/Contacts"
 import Sessions from "./Pages/Panel/Sessions/Sessions"
+import Session from "./Pages/Panel/Sessions/Session"
 const routes = [
     {path:'/' ,element:<Index/>},
     {path:'/course-info/:courseName',element:<CourseInfo/>},
@@ -27,6 +28,7 @@ const routes = [
     {path :'/article/:page', element :<Article/>},
     {path:'/contact',element:<Contact/>},
     {path:'/search/:value',element :<Search/>},
+    {path:'/:courseName/:sessionID',element:<Session/>},
     {path:'/p-admin/*',element :<AdminPanel/> ,children:[{path:'users',element:<Users/>},
                                                         {path:'courses',element:<AdminCourse/>},
                                                         {path:'menu',element:<Menu/>},
