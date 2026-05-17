@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import Topbar from "./../../Components/Topbar/Topbar";
 import Navbar from "./../../Components/Navbar/Navbar";
 import Footer from "./../../Components/Footer/Footer";
-import Breadcrumb from "../../Components/Breadcrumb/Breadcrumb";
+import Breadcrumb from './../../Components/Breadcrump/Breadcrump'
 import CourseDetailBox from "../../Components/CourseDetailBox/CourseDetailBox";
 import CommentsTextArea from "../../Components/CommentsTextArea/CommentsTextArea";
 import Accordion from "react-bootstrap/Accordion";
-import { useParams } from "react-router-dom";
-import swal from 'sweetalert'
+import { useParams, Link } from "react-router-dom";
+import swal from "sweetalert";
 
 import "./CourseInfo.css";
 
@@ -17,8 +17,8 @@ export default function CourseInfo() {
   const [createdAt, setCreatedAt] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
   const [courseDetails, setCourseDetails] = useState({});
-  const [courseTeacher, setCourseTeacher] = useState({})
-  const [courseCategory, setCourseCategory] = useState({})
+  const [courseTeacher, setCourseTeacher] = useState({});
+  const [courseCategory, setCourseCategory] = useState({});
 
   const { courseName } = useParams();
 
@@ -40,8 +40,8 @@ export default function CourseInfo() {
         setCourseDetails(courseInfo);
         setCreatedAt(courseInfo.createdAt);
         setUpdatedAt(courseInfo.updatedAt);
-        setCourseTeacher(courseInfo.creator)
-        setCourseCategory(courseInfo.categoryID)
+        setCourseTeacher(courseInfo.creator);
+        setCourseCategory(courseInfo.categoryID);
       });
   }, []);
 
@@ -62,10 +62,10 @@ export default function CourseInfo() {
       .then((res) => res.json())
       .then((result) => {
         swal({
-          title: 'کامنت موردنظر با موفقیت ثبت شد',
-          icon: 'success',
-          buttons: 'تایید'
-        })
+          title: "کامنت موردنظر با موفقیت ثبت شد",
+          icon: "success",
+          buttons: "تایید",
+        });
       });
   };
 
@@ -95,9 +95,7 @@ export default function CourseInfo() {
           <div className="row">
             <div className="col-6">
               <a href="#" className="course-info__link">
-                {
-                  courseCategory.title
-                }
+                {courseCategory.title}
               </a>
               <h1 className="course-info__title">{courseDetails.name}</h1>
               <p className="course-info__text">{courseDetails.description}</p>
@@ -260,24 +258,52 @@ export default function CourseInfo() {
                       <Accordion.Item eventKey="0" className="accordion">
                         <Accordion.Header>جلسات دوره</Accordion.Header>
                         {sessions.map((session, index) => (
-                          <Accordion.Body key={session._id} className="introduction__accordion-body">
-                            <div className="introduction__accordion-right">
-                              <span className="introduction__accordion-count">
-                                {index + 1}
-                              </span>
-                              <i className="fab fa-youtube introduction__accordion-icon"></i>
-                              <a
-                                href="#"
-                                className="introduction__accordion-link"
-                              >
-                                {session.title}
-                              </a>
-                            </div>
-                            <div className="introduction__accordion-left">
-                              <span className="introduction__accordion-time">
-                                {session.time}
-                              </span>
-                            </div>
+                          <Accordion.Body
+                            key={session._id}
+                            className="introduction__accordion-body"
+                          >
+                            {session.free === 1 ||
+                            courseDetails.isUserRegisteredToThisCourse ? (
+                              <>
+                                <div className="introduction__accordion-right">
+                                  <span className="introduction__accordion-count">
+                                    {index + 1}
+                                  </span>
+                                  <i className="fab fa-youtube introduction__accordion-icon"></i>
+                                  <Link
+                                    to="/"
+                                    className="introduction__accordion-link"
+                                  >
+                                    {session.title}
+                                  </Link>
+                                </div>
+                                <div className="introduction__accordion-left">
+                                  <span className="introduction__accordion-time">
+                                    {session.time}
+                                  </span>
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div className="introduction__accordion-right">
+                                  <span className="introduction__accordion-count">
+                                    {index + 1}
+                                  </span>
+                                  <i className="fab fa-youtube introduction__accordion-icon"></i>
+                                  <span
+                                    className="introduction__accordion-link"
+                                  >
+                                    {session.title}
+                                  </span>
+                                </div>
+                                <div className="introduction__accordion-left">
+                                  <span className="introduction__accordion-time">
+                                    {session.time}
+                                  </span>
+                                  <i className="fa fa-lock"></i>
+                                </div>
+                              </>
+                            )}
                           </Accordion.Body>
                         ))}
                       </Accordion.Item>
@@ -299,9 +325,7 @@ export default function CourseInfo() {
                       <div className="techer-details__header-titles">
                         <a href="#" className="techer-details__header-link">
                           {/* محمدامین سعیدی راد */}
-                          {
-                            courseTeacher.name
-                          }
+                          {courseTeacher.name}
                         </a>
                         <span className="techer-details__header-skill">
                           Front End & Back End Developer
