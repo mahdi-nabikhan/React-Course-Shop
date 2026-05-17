@@ -3,7 +3,7 @@ import React, { useEffect, useState,memo } from "react";
 import "./Topbar.css";
 import { Link, data } from "react-router";
 
-export default memo(function Topbar() {
+export default memo(function Topbar({info}) {
   const[allTobbarLinks,setAllTopbarLinks]=useState([])
   useEffect(()=>{
     fetch('http://localhost:5000/v1/menus/topbar').then(res => res.json()).then(data => setAllTopbarLinks(data)) 
@@ -12,6 +12,13 @@ export default memo(function Topbar() {
     const shuffled = [...arr].sort(()=> 0.5 - Math.random())
     return shuffled.slice(0,randomCount)
   }
+  const [indexInfo,setIndexInfo]=useState()
+  useEffect(()=>{
+    fetch('http://localhost:5000/infos/index').then(res=>res.jsob()).then((allIndex)=>{
+      setIndexInfo(allIndex)
+
+    })
+  },[])
   return (
     <div class="top-bar">
       <div class="container-fluid">
@@ -36,13 +43,13 @@ export default memo(function Topbar() {
           <div class="top-bar__left">
             <div class="top-bar__email">
               <a href="#" class="top-bar__email-text top-bar__link">
-                sabzlearn@gmail.com
+                {indexInfo.email}
               </a>
               <i class="fas fa-envelope top-bar__email-icon"></i>
             </div>
             <div class="top-bar__phone">
               <a href="#" class="top-bar__phone-text top-bar__link">
-                09921558293
+                {indexInfo.phone}
               </a>
               <i class="fas fa-phone top-bar__phone-icon"></i>
             </div>
