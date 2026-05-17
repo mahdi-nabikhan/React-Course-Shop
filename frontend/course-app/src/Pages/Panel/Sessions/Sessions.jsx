@@ -10,6 +10,7 @@ export default function Sessions() {
   const [sessionCourse, setSessionCourse] = useState('-1');
   const [sessionVideo, setSessionVideo] = useState({})
   const [sessions, setSession] = useState([]);
+  const [isSessionFree,setIsSessionFree]=useState(1)
   const [formState, onInputHandler] = useForm(
     {
       title: {
@@ -157,10 +158,42 @@ export default function Sessions() {
             </div>
             <div class="col-12">
               <div class="bottom-form">
+                <div class="condition">
+                  <label class="input-title">وضعیت دوره</label>
+                  <div class="radios">
+                    <div class="available">
+                      <label>
+                        <span>  جلسه غیر رایگان</span>
+                        <input
+                          type="radio"
+                          value="0"
+                          name="condition"
+                          checked
+                          onInput={event => setIsSessionFree(event.target.value)}
+                        />
+                      </label>
+                    </div>
+                    </div>
+                    <div class="unavailable">
+                      <label>
+                        <span> رایگان</span>
+                        <input
+                          type="radio"
+                          value="1"
+                          name="condition"
+                          onInput={event => setIsSessionFree(event.target.value)}
+                        />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+            <div class="col-12">
+              <div class="bottom-form">
                 <div class="submit-btn">
                   <input onClick={createSession} type="submit" value="افزودن" />
                 </div>
               </div>
+            </div>
             </div>
           </form>
         </div>
