@@ -83,6 +83,11 @@ export default function Sidebar() {
             </Link>
           </li>
           <li>
+            <Link to="category">
+              <span> تخفیف </span>
+            </Link>
+          </li>
+          <li>
             <a href="#" onClick={logoutAdmin}>
               <span>خروج</span>
             </a>
