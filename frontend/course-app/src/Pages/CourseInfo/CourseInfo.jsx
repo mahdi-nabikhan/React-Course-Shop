@@ -19,6 +19,7 @@ export default function CourseInfo() {
   const [courseDetails, setCourseDetails] = useState({});
   const [courseTeacher, setCourseTeacher] = useState({});
   const [courseCategory, setCourseCategory] = useState({});
+  const [relatedCourse,setRelatedCourse]=useState([])
 
   const { courseName } = useParams();
   function getDetailCourse (){
@@ -47,7 +48,9 @@ export default function CourseInfo() {
 
   useEffect(() => {
     getDetailCourse()
-    
+    fetch(`http://localhost:5000/v1/courses/related/${courseDetails._id}`).then(res => {
+      res.json()
+    }).then(result => setRelatedCourse(result))
   }, []);
 
   const submitComment = (newCommentBody) => {
@@ -530,18 +533,19 @@ export default function CourseInfo() {
                     دوره های مرتبط
                   </span>
                   <ul className="course-info__courses-list">
-                    <li className="course-info__courses-list-item">
-                      <a href="#" className="course-info__courses-link">
+                    {relatedCourse.map((course) =><li className="course-info__courses-list-item">
+                      <Link to={`/course-info/${course.shrtName}`} className="course-info__courses-link">
                         <img
                           src="/images/courses/js_project.png"
                           alt="Course Cover"
                           className="course-info__courses-img"
                         />
                         <span className="course-info__courses-text">
-                          پروژه های تخصصی با جاوا اسکریپت
+                              {course.name} 
                         </span>
-                      </a>
-                    </li>
+                      </Link>
+                    </li>)}
+                    
                     <li className="course-info__courses-list-item">
                       <a href="#" className="course-info__courses-link">
                         <img
