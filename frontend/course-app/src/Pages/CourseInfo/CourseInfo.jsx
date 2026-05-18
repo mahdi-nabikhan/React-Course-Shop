@@ -21,8 +21,7 @@ export default function CourseInfo() {
   const [courseCategory, setCourseCategory] = useState({});
 
   const { courseName } = useParams();
-
-  useEffect(() => {
+  function getDetailCourse (){
     const localStorageData = JSON.parse(localStorage.getItem("user"));
 
     fetch(`http://localhost:5000/v1/courses/${courseName}`, {
@@ -43,6 +42,12 @@ export default function CourseInfo() {
         setCourseTeacher(courseInfo.creator);
         setCourseCategory(courseInfo.categoryID);
       });
+
+  }
+
+  useEffect(() => {
+    getDetailCourse()
+    
   }, []);
 
   const submitComment = (newCommentBody) => {
@@ -68,6 +73,36 @@ export default function CourseInfo() {
         });
       });
   };
+  const registerInCourse = (course) =>{
+    if (course.price ===0){
+      swal ({
+        title:'مطمئنی ؟',
+        icon:'warning',
+        buttons:['نه','اره']
+      }).then(result =>{
+        if (result){
+          fetch(`http://localhost:5000/courses/${course._id}/register`,{
+            method:'POST',
+            headers:{
+              Authorization: `Bearer ${localStorageData.token}`,
+
+            }
+          }).then(res =>{
+            if (res.ok){
+              swal({
+                title:'ثبت نام شدی',
+                icon:'success',
+                buttons:'ok'
+              })
+            }
+          }).then(
+            getDetailCourse()
+          )
+        }
+      })
+    }
+
+  }
 
   return (
     <>
@@ -363,7 +398,7 @@ export default function CourseInfo() {
                         دانشجوی دوره هستید
                       </span>
                     ) : (
-                      <span className="course-info__register-title">
+                      <span className="course-info__register-title" onClick={()=>{registerInCourse(courseDetails)}}>
                         ثبت نام در دوره
                       </span>
                     )}
