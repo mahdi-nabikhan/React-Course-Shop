@@ -79,14 +79,16 @@ export default function CourseInfo() {
         title:'مطمئنی ؟',
         icon:'warning',
         buttons:['نه','اره']
-      }).then(result =>{
-        if (result){
+      }).then(code =>{
+        if (code){
           fetch(`http://localhost:5000/courses/${course._id}/register`,{
             method:'POST',
             headers:{
+              "Content-Type": "application/json",
               Authorization: `Bearer ${localStorageData.token}`,
 
             }
+            ,body:JSON.stringify({price:course.price - (course.price *code.perecent / 100 )})
           }).then(res =>{
             if (res.ok){
               swal({
@@ -98,6 +100,73 @@ export default function CourseInfo() {
           }).then(
             getDetailCourse()
           )
+        }
+      })
+    }else{
+      swal ({
+        title:'مطمئنی ؟',
+        icon:'warning',
+        buttons:['نه','اره']
+      }).then(result =>{
+        if (result){
+          swal({
+            title:'در صورت داشتن کد تخفیف را وارد کنید',
+            content:'input',
+            buttons:['نه','باشه']
+
+          }).then(result =>{
+              if (result === null){
+                fetch(`http://localhost:5000/courses/${course._id}/register`,{
+                  method:'POST',
+                  headers:{
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorageData.token}`,
+      
+                  }
+                  ,body:JSON.stringify({price:course})
+                }).then(res =>{
+                  if (res.ok){
+                    swal({
+                      title:'ثبت نام شدی',
+                      icon:'success',
+                      buttons:'ok'
+                    })
+                  }
+                }).then(
+                  getDetailCourse()
+                )
+                
+
+              }else{
+                fetch(`http://localhost:4000/v1/off/${code}`,{
+                  method:'POST',
+                  headers:{
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorageData.token}`,
+                  },
+                  body:JSON.stringify({
+                    course:course._id
+                  })
+                }).then(res =>{
+                   if (res.status === 404){
+                    swal({
+                      title:'کد تخفیف درست نیست',
+                      icon:'error',
+                      buttons:'اوکی'
+                    })
+                   }else if (res.status === 409){
+                    swal({
+                      title:'کد تخفیف قبلا استفاده شده  ',
+                      icon:'error',
+                      buttons:'اوکی'
+                    })
+                    
+                   }else{
+                    return res .json()
+                   }
+                })
+              }
+          })
         }
       })
     }
