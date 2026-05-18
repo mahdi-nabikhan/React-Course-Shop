@@ -19,6 +19,7 @@ import Sessions from "./Pages/Panel/Sessions/Sessions"
 import Session from "./Pages/Panel/Sessions/Session"
 import Comments from "./Pages/Panel/Comments/Comments"
 import Offs from "./Pages/Panel/Offs/Offs"
+import Draft from "./Pages/Panel/AdminArticles/draft"
 const routes = [
     {path:'/' ,element:<Index/>},
     {path:'/course-info/:courseName',element:<CourseInfo/>},
@@ -39,7 +40,8 @@ const routes = [
                                                         {path:'contacts',element:<Contacts/>},
                                                         {path:'sessions',element:<Sessions/>},
                                                         {path:'comments',element:<Comments/>},
-                                                        {path:'offs',element:<Offs/>}
+                                                        {path:'offs',element:<Offs/>},
+                                                        {path:'articles/draft/:shortName',element:<Draft/>}
                                                         ],
                                                     }
 

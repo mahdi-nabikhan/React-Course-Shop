@@ -5,6 +5,7 @@ import { useForm } from "./../../../hooks/useForm";
 import Input from "./../../../Components/Form/Input";
 import { minValidator } from "./../../../validators/rules";
 import Editor from "../../../Components/Form/Editor";
+import { Link } from "react-router";
 
 export default function Articles() {
   const [articles, setArticles] = useState([]);
@@ -238,7 +239,7 @@ export default function Articles() {
             <div class="col-12">
               <div class="bottom-form">
                 <div class="submit-btn">
-                  <input type="submit" value="افزودن" className=" m-1" onClick={createArticle} />
+                  <input type="submit" value="انتشار" className=" m-1" onClick={createArticle} />
                   <input type="submit" value="پیشنویس " className=" m-1" onClick={saveArticleDraft} />
                 </div>
               </div>
@@ -255,6 +256,8 @@ export default function Articles() {
               <th>عنوان</th>
               <th>لینک</th>
               <th>نویسنده</th>
+              <th>وضعیت مقاله</th>
+              <th>مشاهده</th>
               <th>ویرایش</th>
               <th>حذف</th>
             </tr>
@@ -265,11 +268,19 @@ export default function Articles() {
                 <td>{index + 1}</td>
                 <td>{article.title}</td>
                 <td>{article.shortName}</td>
+                <td>{article.publish === 1 ?'منتشر شده':'پیشنویس'}</td>
+                <td>
+                  {article.publish ===1 ? (<><i className="fa fa-check"></i></>):(<> <Link to={`articles/draft/${article.shortName}`} type="button" class="btn btn-primary edit-btn">
+                  ادامه نوشتن
+                  </Link></>)}
+                </td>
                 <td>{article.creator.name}</td>
                 <td>
                   <button type="button" class="btn btn-primary edit-btn">
                     ویرایش
                   </button>
+  
+                 
                 </td>
                 <td>
                   <button
