@@ -20,6 +20,7 @@ import Session from "./Pages/Panel/Sessions/Session"
 import Comments from "./Pages/Panel/Comments/Comments"
 import Offs from "./Pages/Panel/Offs/Offs"
 import Draft from "./Pages/Panel/AdminArticles/draft"
+import PadminIndex from "./Pages/Panel/Index/Index"
 const routes = [
     {path:'/' ,element:<Index/>},
     {path:'/course-info/:courseName',element:<CourseInfo/>},
@@ -32,7 +33,9 @@ const routes = [
     {path:'/contact',element:<Contact/>},
     {path:'/search/:value',element :<Search/>},
     {path:'/:courseName/:sessionID',element:<Session/>},
-    {path:'/p-admin/*',element :<AdminPanel/> ,children:[{path:'users',element:<Users/>},
+    {path:'/p-admin/*',element :<AdminPanel/> ,children:[
+        {path:'',element:<PadminIndex/>},
+        {path:'users',element:<Users/>},
                                                         {path:'courses',element:<AdminCourse/>},
                                                         {path:'menu',element:<Menu/>},
                                                         {path:'articles',element:<AdminArticles/>},
